@@ -1,10 +1,11 @@
+Forked from https://github.com/shvetsgroup/jquery.multisortable
 # jquery.multisortable [![Build Status](https://travis-ci.org/shvetsgroup/jquery.multisortable.png)](https://travis-ci.org/shvetsgroup/jquery.multisortable)
 
 Extension of [jQuery UI Sortable](http://jqueryui.com/sortable/), which works with multiple selected elements.
 
 ## jsFiddle example
 
-http://jsfiddle.net/neochief/KWeMM/
+http://jsfiddle.net/arvinddhakad/50fd0u8h
 
 ## Usage
 
