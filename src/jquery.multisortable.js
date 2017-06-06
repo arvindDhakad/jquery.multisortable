@@ -7,6 +7,12 @@
  * multi-selectable, multi-sortable jQuery plugin
  */
 
+
+ /*
+ some changes @arvindDhakad
+ */
+
+
 !function($) {
 
 	$.fn.multiselectable = function(options) {
@@ -123,32 +129,16 @@
 				var myIndex = item.data('i');
 
 				var itemsBefore = list.find('.' + settings.selectedClass).filter(function() {
-					return $(this).data('i') < myIndex
+				return $(this).data('i') < myIndex || $(this).data('i') > myIndex ;
 				}).css({
 						position: '',
 						width: '',
 						left: '',
 						top: '',
 						zIndex: ''
-					});
+					}).data('top',0);
 
 				item.before(itemsBefore);
-
-				var itemsAfter = list.find('.' + settings.selectedClass).filter(function() {
-					return $(this).data('i') > myIndex
-				}).css({
-						position: '',
-						width: '',
-						left: '',
-						top: '',
-						zIndex: ''
-					});
-
-				item.after(itemsAfter);
-
-				setTimeout(function() {
-					itemsAfter.add(itemsBefore).addClass(settings.selectedClass);
-				}, 0);
 			}
 		}
 
@@ -173,13 +163,15 @@
 					//assign indexes to all selected items
 					parent.find('.' + settings.selectedClass).each(function(i) {
 						$(this).data('i', i);
+            $(this).data('top', 0);
 					});
 
-					// adjust placeholder size to be size of items
-					var height = parent.find('.' + settings.selectedClass).length * ui.item.outerHeight();
-					ui.placeholder.height(height);
-				}
+			// changed placeholder size of multiple item to one item
+      // when large number of items (>5)selected it was not cool :)
 
+			var height = ui.item.outerHeight();
+			ui.placeholder.height(height);
+				}
 				settings.start(event, ui);
 			};
 
@@ -191,7 +183,7 @@
 			options.sort = function(event, ui) {
 				var parent = ui.item.parent(),
 					myIndex = ui.item.data('i'),
-					top = parseInt(ui.item.css('top').replace('px', '')),
+					top = parseInt(ui.item.data('top')),
 					left = parseInt(ui.item.css('left').replace('px', ''));
 
 				// fix to keep compatibility using prototype.js and jquery together
@@ -199,42 +191,23 @@
 
 				var height = 0;
 				$('.' + settings.selectedClass, parent).filter(function() {
-					return $(this).data('i') < myIndex;
+					return $(this).data('i') < myIndex || $(this).data('i') > myIndex ;
 				}).reverse().each(function() {
-						height += $(this).outerHeight();
+						 height = $(this).outerHeight();
 						$(this).css({
 							left: left,
 							top: top - height,
 							position: 'absolute',
 							zIndex: 1000,
 							width: ui.item.width()
-						})
-					});
-
-				height = ui.item.outerHeight();
-				$('.' + settings.selectedClass, parent).filter(function() {
-					return $(this).data('i') > myIndex;
-				}).each(function() {
-						var item = $(this);
-						item.css({
-							left: left,
-							top: top + height,
-							position: 'absolute',
-							zIndex: 1000,
-							width: ui.item.width()
 						});
-
-						height += item.outerHeight();
 					});
-
 				settings.sort(event, ui);
 			};
-
 			options.receive = function(event, ui) {
 				regroup(ui.item, ui.sender);
 				settings.receive(event, ui);
 			};
-
 			list.sortable(options).disableSelection();
 		})
 	};
@@ -252,3 +225,7 @@
 	};
 
 }(jQuery);
+
+jQuery(function($){
+	$('ul').multisortable();
+});
