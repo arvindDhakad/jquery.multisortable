@@ -129,7 +129,7 @@
 				var myIndex = item.data('i');
 
 				var itemsBefore = list.find('.' + settings.selectedClass).filter(function() {
-				return $(this).data('i') < myIndex || $(this).data('i') > myIndex ;
+					return $(this).data('i') < myIndex
 				}).css({
 						position: '',
 						width: '',
@@ -139,6 +139,22 @@
 					}).data('top',0);
 
 				item.before(itemsBefore);
+
+				var itemsAfter = list.find('.' + settings.selectedClass).filter(function() {
+					return $(this).data('i') > myIndex
+				}).css({
+						position: '',
+						width: '',
+						left: '',
+						top: '',
+						zIndex: ''
+					}).data('top',0);
+
+				item.after(itemsAfter);
+
+				setTimeout(function() {
+					itemsAfter.add(itemsBefore).addClass(settings.selectedClass);
+				}, 0);
 			}
 		}
 
